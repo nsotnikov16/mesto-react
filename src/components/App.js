@@ -13,7 +13,7 @@ import {
 import { codeEscape, popupOpened } from "../utils/constants";
 
 //СРАЗУ ГЛОБАЛЬНЫЙ ВОПРОС: ПОЧЕМУ ПРИ СБОРКЕ ПРОЕКТА (NPM RUN BUILD), СЕРВЕР НЕ ВИДИТ СТРАНИЦУ (404)? В ЧЕМ ПРОБЛЕМА? УЖЕ ВЕСЬ ИНТЕРНЕТ ПЕРЕРЫЛ
-
+// и еще один вопрос. это нормально, что долго загружаются данные с сервера? в прошлой проектной так не было. Интернет хороший.
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
