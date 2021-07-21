@@ -12,6 +12,8 @@ import {
 } from "../utils/utils";
 import { codeEscape, popupOpened } from "../utils/constants";
 
+//СРАЗУ ГЛОБАЛЬНЫЙ ВОПРОС: ПОЧЕМУ ПРИ СБОРКЕ ПРОЕКТА (NPM RUN BUILD), СЕРВЕР НЕ ВИДИТ СТРАНИЦУ (404)? В ЧЕМ ПРОБЛЕМА? УЖЕ ВЕСЬ ИНТЕРНЕТ ПЕРЕРЫЛ
+
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
