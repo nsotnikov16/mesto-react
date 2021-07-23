@@ -14,14 +14,6 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}, проверьте URL`);
   }
 
-  _handleResponseLike(res) {
-    if (res.ok) {
-      return res.json().then((result) => result.likes.length);
-    }
-
-    return Promise.reject(`Ошибка: ${res.status}, проверьте URL`);
-  }
-
   getInitialCards() {
     return fetch(`${this._url}/cards`, {
       headers: this._headers,
@@ -70,14 +62,14 @@ class Api {
     return fetch(`${this._url}/cards/likes/${cardId}`, {
       method: "PUT",
       headers: this._headers,
-    }).then(this._handleResponseLike);
+    }).then(this._handleResponse);
   }
 
   deleteLikeCard(cardId) {
     return fetch(`${this._url}/cards/likes/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    }).then(this._handleResponseLike);
+    }).then(this._handleResponse);
   }
 
   deleteCard(cardId) {

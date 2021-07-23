@@ -20,18 +20,16 @@ function Main (props) {
     }
 
     React.useEffect(() => {
-      Promise.all([api.getUserData(), api.getInitialCards()]).then(
-        ([userData, cardsData]) => {
+      Promise.all([api.getUserData(), api.getInitialCards()])
+        .then(([userData, cardsData]) => {
           getUserData(userData);
           setCards(cardsData);
-        }
-      );
+        })
+        .catch((err) => alert(err));
     }, []);
 
     function cardClickImgOpen(data) {
-      props.isCardOpen();
-      props.cardSrcImg(data.link);
-      props.cardNameImg(data.name);
+      props.isCardOpen(data);
     }
 
     const cardsItems = cards.map((item) => {
@@ -44,8 +42,8 @@ function Main (props) {
               <section className="profile">
                   <div className="profile__container">
                       <div className="profile__change" onMouseOver={props.onHoverAvatar} onMouseOut={props.onHoverAvatar}>
-                          <img src={userAvatar} alt="Аватар" className={`profile__avatar ${props.isHover}`} />
-                          <img src={editAvatar} alt="Изменить аватар" className={`profile__edit-avatar ${props.isVisible}`} onClick={props.onEditAvatar}/>
+                          <img src={userAvatar} alt="Аватар" className={`profile__avatar ${(props.isHover && "profile__avatar_opacity") || ''}`} />
+                          <img src={editAvatar} alt="Изменить аватар" className={`profile__edit-avatar ${(props.isVisible && "profile__edit-avatar_visible") || ''}`} onClick={props.onEditAvatar}/>
                       </div>
                       <div className="profile__into">
                           <div className="profile__username-btn">

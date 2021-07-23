@@ -10,20 +10,17 @@ import {
   contentPopupProfile,
   contentPopupAddPlace,
 } from "../utils/utils";
-import { codeEscape, popupOpened } from "../utils/constants";
+import { codeEscape } from "../utils/constants";
 
 function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 
-  const [selectedCard, setSelectedCard] = React.useState(false)
+  const [selectedCard, setSelectedCard] = React.useState({name: '', link: ''})
 
   const [isHoverAvatar, setIsHoverAvatar] = React.useState(false);
   const [isVisibleEditAvatar, setIsVisibleEditAvatar] = React.useState(false);
-
-  const [srcImagePopup, setSrcImagePopup] = React.useState('')
-  const [nameImagePopup, setNameImagePopup] = React.useState('')
 
   function handleEditAvatarClick() {
     setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
@@ -41,16 +38,15 @@ function App() {
     evt.keyCode === codeEscape && closeAllPopups()
   }
 
-  function handleCardClick() {
-    setSelectedCard(!selectedCard)
-    return selectedCard
+  function handleCardClick(data) {
+    setSelectedCard({link: data.link, name: data.name})
   }
 
   function closeAllPopups() {
     isEditProfilePopupOpen && setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
     isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
     isAddPlacePopupOpen && setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
-    selectedCard && setSelectedCard(!selectedCard)
+    selectedCard.link && setSelectedCard({name: '', link: ''})
   }
 
   function hoverEditAvatar() {
@@ -63,7 +59,7 @@ function App() {
   }
 
   React.useEffect(() => {
-    (isEditProfilePopupOpen || isEditAvatarPopupOpen || isAddPlacePopupOpen || selectedCard) &&
+    (isEditProfilePopupOpen || isEditAvatarPopupOpen || isAddPlacePopupOpen || selectedCard.name !== '') &&
       document.addEventListener("keydown", handleEscClosePopup);
 
     return () => document.removeEventListener("keydown", handleEscClosePopup);
@@ -75,46 +71,45 @@ function App() {
         <Header />
         <Main
           isCardOpen = {handleCardClick}
-          cardSrcImg = {setSrcImagePopup}
-          cardNameImg = {setNameImagePopup}
           onEditProfile={handleEditProfileClick}
           onEditAvatar={handleEditAvatarClick}
           onAddPlace={handleAddPlaceClick}
           onHoverAvatar={hoverEditAvatar}
-          isHover={isHoverAvatar && "profile__avatar_opacity"}
-          isVisible={isVisibleEditAvatar && "profile__edit-avatar_visible"}
+          isHover={isHoverAvatar}
+          isVisible={isVisibleEditAvatar}
         />
         <Footer />
         <PopupWithForm
           name="avatar"
           title="Обновить аватар"
-          isOpen={isEditAvatarPopupOpen && popupOpened}
+          isOpen={isEditAvatarPopupOpen}
           onClose={closeAllPopups}
           children={contentPopupAvatar()}
           handleOverlay={handleOverlayClick}
+          buttonText = 'Сохранить'
         />
         <PopupWithForm
           name="profile"
           title="Редактировать профиль"
-          isOpen={isEditProfilePopupOpen && popupOpened}
+          isOpen={isEditProfilePopupOpen}
           onClose={closeAllPopups}
           children={contentPopupProfile()}
           handleOverlay={handleOverlayClick}
+          buttonText = "Сохранить"
         />
         <PopupWithForm
           name="newplace"
           title="Новое место"
-          isOpen={isAddPlacePopupOpen && popupOpened}
+          isOpen={isAddPlacePopupOpen}
           onClose={closeAllPopups}
           children={contentPopupAddPlace()}
           handleOverlay={handleOverlayClick}
+          buttonText = "Создать"
         />
         <ImagePopup
-          card={selectedCard}
           onClose={closeAllPopups}
-          name={nameImagePopup}
-          link={srcImagePopup}
-          isOpen={selectedCard && popupOpened}
+          card={selectedCard}
+          isOpen={selectedCard.link}
           handleOverlay={handleOverlayClick}
         />
       </div>
