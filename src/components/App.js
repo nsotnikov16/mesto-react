@@ -47,6 +47,8 @@ function App() {
     isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
     isAddPlacePopupOpen && setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
     selectedCard.link && setSelectedCard({name: '', link: ''})
+    //Если я правильно исправил ваше замечание, то теперь есть ньанс с плавностью закрытия попапа изображения
+    // т.к. данные сбрасываются при закрытии, картинка и титульник пропадают быстрее чем попап закроется плавно, то есть остается один только крестик закрытия, который плавно действительно исчезает. Наглядно это видно
   }
 
   function hoverEditAvatar() {
