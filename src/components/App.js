@@ -5,7 +5,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import { codeEscape } from "../utils/constants";
-import api  from "../utils/api.js";
+import api from "../utils/api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -38,19 +38,21 @@ function App() {
       );
   }
 
-  function submitConfirmPopup(form, setButtonText) {
+  function submitConfirmPopup(setButtonText, setButtonDisabled) {
     setButtonText("Удаление...");
 
     api
       .deleteCard(currentCard._id)
       .then(() => {
         setCards(cards.filter((c) => c._id !== currentCard._id));
-        closeAllPopups(form);
-        setButtonText("Да");
+        closeAllPopups();
       })
       .catch((err) => {
         alert(err);
+      })
+      .finally(() => {
         setButtonText("Да");
+        setButtonDisabled(false);
       });
   }
 
@@ -81,15 +83,15 @@ function App() {
   const [isVisibleEditAvatar, setIsVisibleEditAvatar] = React.useState(false);
 
   function handleEditAvatarClick() {
-    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+    setIsEditAvatarPopupOpen(true);
   }
 
   function handleEditProfileClick() {
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+    setIsEditProfilePopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+    setIsAddPlacePopupOpen(true);
   }
 
   function handleEscClosePopup(evt) {
@@ -101,11 +103,10 @@ function App() {
   }
 
   function closeAllPopups() {
-    isEditProfilePopupOpen &&
-      setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
-    isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
-    isAddPlacePopupOpen && setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
-    isConfirmPopupOpen && setIsConfirmPopupOpen(!isConfirmPopupOpen);
+    isEditProfilePopupOpen && setIsEditProfilePopupOpen(false);
+    isEditAvatarPopupOpen && setIsEditAvatarPopupOpen(false);
+    isAddPlacePopupOpen && setIsAddPlacePopupOpen(false);
+    isConfirmPopupOpen && setIsConfirmPopupOpen(false);
     selectedCard.link && setSelectedCard({ name: "", link: "" });
   }
 
@@ -118,47 +119,53 @@ function App() {
     evt.target === evt.currentTarget && closeAllPopups();
   }
 
-  function handleUpdateUser(data, setButtonText) {
+  function handleUpdateUser(data, setButtonText, setButtonDisabled) {
     api
       .editProfile(data)
       .then((res) => {
         setCurrentUser(res);
         closeAllPopups();
-        setButtonText("Сохранить");
       })
       .catch((err) => {
         alert(err);
+      })
+      .finally(() => {
         setButtonText("Сохранить");
+        setButtonDisabled(false);
       });
   }
 
-  function handleUpdateAvatar(data, setButtonText, form) {
+  function handleUpdateAvatar(data, setButtonText, setButtonDisabled, form) {
     api
       .editAvatar(data)
       .then((res) => {
         setCurrentUser(res);
-        closeAllPopups(form);
+        closeAllPopups();
         form.reset();
-        setButtonText("Сохранить");
       })
       .catch((err) => {
         alert(err);
+      })
+      .finally(() => {
         setButtonText("Сохранить");
+        setButtonDisabled(false);
       });
   }
 
-  function handleAddPlaceSubmit(data, setButtonText, form) {
+  function handleAddPlaceSubmit(data, setButtonText, setButtonDisabled, form) {
     api
       .addNewCardServer(data)
       .then((res) => {
         setCards([res, ...cards]);
-        closeAllPopups(form);
+        closeAllPopups();
         form.reset();
-        setButtonText("Создать");
       })
       .catch((err) => {
         alert(err);
+      })
+      .finally(() => {
         setButtonText("Создать");
+        setButtonDisabled(false);
       });
   }
 
@@ -166,6 +173,7 @@ function App() {
     (isEditProfilePopupOpen ||
       isEditAvatarPopupOpen ||
       isAddPlacePopupOpen ||
+      isConfirmPopupOpen ||
       selectedCard.name !== "") &&
       document.addEventListener("keydown", handleEscClosePopup);
 
@@ -178,7 +186,7 @@ function App() {
         <div className="page__content">
           <Header />
           <Main
-            isCardOpen={handleCardClick}
+            onCardOpen={handleCardClick}
             onEditProfile={handleEditProfileClick}
             onEditAvatar={handleEditAvatarClick}
             onAddPlace={handleAddPlaceClick}

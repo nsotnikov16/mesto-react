@@ -1,41 +1,47 @@
 import { popupOpened } from "../utils/constants";
 import React from "react";
-import FormValidator from "../utils/FormValidator";
-import { config } from "../utils/constants";
 
-function PopupWithForm(props) {
+function PopupWithForm({
+  name,
+  isOpen,
+  onClose,
+  title,
+  onSubmit,
+  children,
+  handleOverlay,
+  buttonText,
+  buttonDisabled,
+}) {
   const formRef = React.useRef();
-
-  React.useEffect(() => {
-    const validator = new FormValidator(config, formRef.current);
-    validator.enableValidation();
-  }, []);
 
   return (
     <div
-      className={`popup popup-${props.name} ${
-        (props.isOpen && popupOpened) || ""
-      }`}
-      onClick={props.handleOverlay}
+      className={`popup popup-${name} ${(isOpen && popupOpened) || ""}`}
+      onClick={handleOverlay}
     >
       <div className="popup__container container-profile">
         <button
           type="button"
           className="popup__close"
-          onClick={props.onClose}
+          onClick={onClose}
         ></button>
-        <h2 className="popup__title">{props.title}</h2>
+        <h2 className="popup__title">{title}</h2>
 
         <form
           ref={formRef}
-          onSubmit={props.onSubmit}
-          className={`popup__form form-${props.name}`}
-          name={`form-${props.name}`}
+          onSubmit={onSubmit}
+          className={`popup__form form-${name}`}
+          name={`form-${name}`}
         >
-          {props.children}
+          {children}
 
-          <button type="submit" name="submit" className="popup__save">
-            {props.buttonText}
+          <button
+            type="submit"
+            name="submit"
+            className="popup__save"
+            disabled={buttonDisabled}
+          >
+            {buttonText}
           </button>
         </form>
       </div>

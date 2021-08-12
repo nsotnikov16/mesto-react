@@ -1,20 +1,20 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
-import { contentPopupAvatar } from "../utils/utils";
-function EditAvatarPopup(props) {
+function EditAvatarPopup({ isOpen, onClose, handleOverlay, onUpdateAvatar }) {
   const avatarRef = React.useRef();
   const [buttonText, setButtonText] = React.useState("Сохранить");
-
-  const { isOpen, onClose, handleOverlay } = props;
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
     setButtonText("Сохранение...");
-    props.onUpdateAvatar(
+    setButtonDisabled(true);
+    onUpdateAvatar(
       {
         avatar: avatarRef.current.value,
       },
       setButtonText,
+      setButtonDisabled,
       e.target
     );
   }
@@ -25,11 +25,27 @@ function EditAvatarPopup(props) {
       title="Обновить аватар"
       isOpen={isOpen}
       onClose={onClose}
-      children={contentPopupAvatar(avatarRef)}
       handleOverlay={handleOverlay}
       buttonText={buttonText}
+      buttonDisabled={buttonDisabled}
       onSubmit={handleSubmit}
-    />
+    >
+      <fieldset className="popup__fieldset">
+        <input
+          type="url"
+          name="link"
+          id="link-update-input"
+          placeholder="Ссылка на аватар"
+          className="popup__input popup__input_field_link"
+          ref={avatarRef}
+          required
+        />
+        <span
+          className="popup__input-error"
+          id="link-update-input-error"
+        ></span>
+      </fieldset>
+    </PopupWithForm>
   );
 }
 

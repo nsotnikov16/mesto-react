@@ -1,20 +1,19 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
-import { contentPopupProfile } from "../utils/utils";
 
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 
-function EditProfilePopup(props) {
+function EditProfilePopup({ isOpen, onClose, handleOverlay, onUpdateUser }) {
   const currentUser = React.useContext(CurrentUserContext);
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const { isOpen, onClose, handleOverlay } = props;
   const [buttonText, setButtonText] = React.useState("Сохранить");
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
 
   React.useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   function handleChange(evt) {
     evt.target.name === "name"
@@ -25,12 +24,14 @@ function EditProfilePopup(props) {
   function handleSubmit(e) {
     e.preventDefault();
     setButtonText("Сохранение...");
-    props.onUpdateUser(
+    setButtonDisabled(true);
+    onUpdateUser(
       {
         name,
         about: description,
       },
-      setButtonText
+      setButtonText,
+      setButtonDisabled
     );
   }
 
@@ -40,11 +41,48 @@ function EditProfilePopup(props) {
       title="Редактировать профиль"
       isOpen={isOpen}
       onClose={onClose}
-      children={contentPopupProfile(name, description, handleChange)}
       handleOverlay={handleOverlay}
       buttonText={buttonText}
+      buttonDisabled={buttonDisabled}
       onSubmit={handleSubmit}
-    />
+    >
+      <fieldset className="popup__fieldset">
+        <input
+          type="text"
+          name="name"
+          id="name-profile-input"
+          placeholder="Имя"
+          className="popup__input popup__input_field_username"
+          minLength="2"
+          maxLength="40"
+          value={name || ""}
+          onChange={handleChange}
+          required
+        />
+        <span
+          className="popup__input-error"
+          id="name-profile-input-error"
+        ></span>
+      </fieldset>
+      <fieldset className="popup__fieldset">
+        <input
+          type="text"
+          name="info"
+          id="info-profile-input"
+          placeholder="О себе"
+          className="popup__input popup__input_field_info"
+          minLength="2"
+          maxLength="200"
+          value={description || ""}
+          onChange={handleChange}
+          required
+        />
+        <span
+          className="popup__input-error"
+          id="info-profile-input-error"
+        ></span>
+      </fieldset>
+    </PopupWithForm>
   );
 }
 

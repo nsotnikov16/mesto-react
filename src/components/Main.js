@@ -3,18 +3,33 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import editAvatar from "../images/edit-avatar.svg";
 import { Card } from "./Card";
 
-function Main(props) {
-
-  const {cards, onCardDelete, onCardLike, onHoverAvatar, isHover, isVisible, onEditAvatar, onEditProfile, onAddPlace} = props
-
+function Main({
+  cards,
+  onCardDelete,
+  onCardLike,
+  onHoverAvatar,
+  isHover,
+  isVisible,
+  onEditAvatar,
+  onEditProfile,
+  onAddPlace,
+  onCardOpen,
+}) {
   const currentUser = React.useContext(CurrentUserContext);
   function cardClickImgOpen(data) {
-    props.isCardOpen(data);
+    onCardOpen(data);
   }
-  
 
-  const cardsItems = cards.map(item => {
-    return <Card key={item._id} card={item} onCardDelete={onCardDelete} onCardLike={onCardLike} onCardClick={cardClickImgOpen} />;
+  const cardsItems = cards.map((item) => {
+    return (
+      <Card
+        key={item._id}
+        card={item}
+        onCardDelete={onCardDelete}
+        onCardLike={onCardLike}
+        onCardClick={cardClickImgOpen}
+      />
+    );
   });
 
   return (

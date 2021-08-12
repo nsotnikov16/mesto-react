@@ -1,14 +1,14 @@
 import React from "react";
 import PopupWithForm from "./PopupWithForm";
 
-function ConfirmPopup(props) {
+function ConfirmPopup({ isOpen, onClose, handleOverlay, onConfirm }) {
   const [buttonText, setButtonText] = React.useState("Да");
-
-  const { isOpen, onClose, handleOverlay } = props;
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onConfirm(e.target, setButtonText);
+    setButtonDisabled(true);
+    onConfirm(setButtonText, setButtonDisabled);
   }
 
   return (
@@ -19,6 +19,7 @@ function ConfirmPopup(props) {
       isOpen={isOpen}
       onClose={onClose}
       handleOverlay={handleOverlay}
+      buttonDisabled={buttonDisabled}
       onSubmit={handleSubmit}
     />
   );
