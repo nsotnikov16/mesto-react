@@ -5,7 +5,7 @@ import Main from "./Main";
 import Footer from "./Footer";
 import ImagePopup from "./ImagePopup";
 import { codeEscape } from "../utils/constants";
-import { api } from "../utils/api.js";
+import api  from "../utils/api.js";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import EditProfilePopup from "./EditProfilePopup";
 import EditAvatarPopup from "./EditAvatarPopup";

@@ -1,6 +1,6 @@
 import { apiRequest } from "./constants";
 
-export default class Api {
+export class Api {
   constructor(options) {
     this._headers = options.headers;
     this._url = options.baseUrl;
@@ -87,4 +87,5 @@ export default class Api {
   }
 }
 
-export const api = new Api(apiRequest);
+const api = new Api(apiRequest);
+export default api
